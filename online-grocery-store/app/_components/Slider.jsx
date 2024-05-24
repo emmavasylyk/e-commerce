@@ -1,4 +1,6 @@
+"use client";
 import React from "react";
+import Autoplay from "embla-carousel-autoplay";
 
 import {
   Carousel,
@@ -11,7 +13,13 @@ import Image from "next/image";
 
 function Slider({ sliderList }) {
   return (
-    <Carousel>
+    <Carousel
+      plugins={[
+        Autoplay({
+          delay: 5000,
+        }),
+      ]}
+    >
       <CarouselContent>
         {sliderList.map((slider, index) => {
           const sliderUrls = slider?.attributes?.image?.data?.map(
