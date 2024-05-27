@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 function CategoryList({ categoryList }) {
@@ -11,9 +12,10 @@ function CategoryList({ categoryList }) {
             (image) => image?.attributes?.url
           );
           return (
-            <div
+            <Link
+              href={`/products-category/${category?.attributes?.name}`}
               key={index}
-              className="flex flex-col items-center bg-green-50 gap-2 p-3 rounded-lg cursor-pointer group hover:bg-green-200"
+              className="flex flex-col items-center bg-green-50 gap-2 p-3 rounded-lg cursor-pointer group hover:bg-green-600"
             >
               {imageUrls?.map((imageUrl, index) => (
                 <Image
@@ -25,10 +27,10 @@ function CategoryList({ categoryList }) {
                   className="group-hover:scale-125 transition-all ease-in-out"
                 />
               ))}
-              <h2 className="text-lg text-green-800">
+              <h2 className="text-lg text-green-800 group-hover:text-white">
                 {category?.attributes?.name}
               </h2>
-            </div>
+            </Link>
           );
         })}
       </div>

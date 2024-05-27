@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import GlobalApi from "../_utils/GlobalApi";
+import Link from "next/link";
 
 function Header() {
   const [categoryList, setCategoryList] = useState([]);
@@ -48,22 +49,24 @@ function Header() {
                 (image) => image?.attributes?.url
               );
               return (
-                <DropdownMenuItem
-                  key={category.id}
-                  className="flex gap-4 items-center cursor-pointer"
-                >
-                  {imageUrls?.map((imageUrl, index) => (
-                    <Image
-                      key={index}
-                      src={`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}${imageUrl}`}
-                      unoptimized={true}
-                      alt="icon"
-                      width={30}
-                      height={30}
-                    />
-                  ))}
-                  <h2 className="text-lg">{category?.attributes?.name}</h2>
-                </DropdownMenuItem>
+                <Link href={`/products-category/${category?.attributes?.name}`}>
+                  <DropdownMenuItem
+                    key={category.id}
+                    className="flex gap-4 items-center cursor-pointer"
+                  >
+                    {imageUrls?.map((imageUrl, index) => (
+                      <Image
+                        key={index}
+                        src={`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}${imageUrl}`}
+                        unoptimized={true}
+                        alt="icon"
+                        width={30}
+                        height={30}
+                      />
+                    ))}
+                    <h2 className="text-lg">{category?.attributes?.name}</h2>
+                  </DropdownMenuItem>
+                </Link>
               );
             })}
           </DropdownMenuContent>
