@@ -26,6 +26,22 @@ const registerUser = (username, email, password) =>
 const signIn = (email, password) =>
   axiosClient.post("/auth/local", { identifier: email, password });
 
+const addToCard = (data, jwt) =>
+  axiosClient.post("/user-cards", data, {
+    headers: {
+      Authorization: `Bearer ${jwt}`,
+    },
+  });
+
+const getCardItems = (userId, jwt) =>
+  axiosClient
+    .get(`/user-cards?filters[userId][$eq]=${userId}&populate=*`, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    })
+    .then((resp) => resp.data.data);
+
 export default {
   getCategory,
   getSliders,
@@ -34,4 +50,6 @@ export default {
   getProductsByCategory,
   registerUser,
   signIn,
+  addToCard,
+  getCardItems,
 };

@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "user_cards",
+  "info": {
+    "singularName": "user-card",
+    "pluralName": "user-cards",
+    "displayName": "User Card",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "quantity": {
+      "type": "decimal"
+    },
+    "amount": {
+      "type": "decimal"
+    },
+    "products": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::product.product",
+      "inversedBy": "user_cards"
+    },
+    "users_permissions_users": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "user_cards"
+    },
+    "userId": {
+      "type": "integer"
+    }
+  }
+}

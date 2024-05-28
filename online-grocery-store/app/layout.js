@@ -5,6 +5,8 @@ import "./globals.css";
 import Header from "./_components/Header";
 import { Toaster } from "@/components/ui/sonner";
 import { usePathname } from "next/navigation";
+import { UpdateCardContext } from "./_context/UpdateCardContext";
+import { useState } from "react";
 
 const outfit = Outfit({ subsets: ["latin"] });
 
@@ -15,6 +17,7 @@ const outfit = Outfit({ subsets: ["latin"] });
 
 export default function RootLayout({ children }) {
   const params = usePathname();
+  const [updateCard, setUpdateCard] = useState(false);
 
   const showHeader =
     params == "/sign-in" || params == "/create-account" ? false : true;
@@ -22,9 +25,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={outfit.className}>
-        {showHeader && <Header />}
-        {children}
-        <Toaster />
+        <UpdateCardContext.Provider value={{ updateCard, setUpdateCard }}>
+          {showHeader && <Header />}
+          {children}
+          <Toaster />
+        </UpdateCardContext.Provider>
       </body>
     </html>
   );

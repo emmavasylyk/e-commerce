@@ -44,6 +44,12 @@
       "relation": "manyToMany",
       "target": "api::category.category",
       "inversedBy": "products"
+    },
+    "user_cards": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::user-card.user-card",
+      "mappedBy": "products"
     }
   }
 }

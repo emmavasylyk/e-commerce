@@ -1,9 +1,15 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { CircleUserRound, LayoutGrid, Search, ShoppingBag } from "lucide-react";
+import {
+  CircleUserRound,
+  LayoutGrid,
+  Search,
+  ShoppingBag,
+  ShoppingBasket,
+} from "lucide-react";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import {
   DropdownMenu,
@@ -16,21 +22,40 @@ import {
 import GlobalApi from "../_utils/GlobalApi";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { UpdateCardContext } from "../_context/UpdateCardContext";
 
 function Header() {
   const [categoryList, setCategoryList] = useState([]);
+  const [totalCartItem, setTotalCartItem] = useState(0);
   const router = useRouter();
   const isLogin = sessionStorage.getItem("jwt") ? true : false;
+  const jwt = sessionStorage.getItem("jwt");
+  const user = JSON.parse(sessionStorage.getItem("user"));
+  const { updateCard, setUpdateCard } = useContext(UpdateCardContext);
 
   useEffect(() => {
     getCategoryList();
   }, []);
+
+  useEffect(() => {
+    getCardItems();
+  }, [updateCard]);
 
   // Get Category List
   const getCategoryList = () => {
     GlobalApi.getCategory().then((resp) => {
       setCategoryList(resp.data.data);
     });
+  };
+
+  // Used to get total cart items
+  const getCardItems = async () => {
+    // GlobalApi.getCardItems().then((resp) => {
+    //   setTotalCartItem(resp.data.data.length);
+    // });
+    const cardItemList = await GlobalApi.getCardItems(user.id, jwt);
+    console.log("cardItemList", cardItemList);
+    setTotalCartItem(cardItemList?.length);
   };
 
   const onSignOut = () => {
@@ -90,7 +115,10 @@ function Header() {
       </div>
       <div className="flex items-center gap-5">
         <h2 className="flex gap-2 items-center text-lg">
-          <ShoppingBag /> 0
+          <ShoppingBasket className="w-7 h-7" />{" "}
+          <span className="bg-primary text-white px-2 rounded-full">
+            {totalCartItem}
+          </span>
         </h2>
         {!isLogin ? (
           <Link href="/sign-in">

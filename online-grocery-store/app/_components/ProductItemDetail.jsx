@@ -1,11 +1,19 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ShoppingBasket } from "lucide-react";
+import { LoaderCircle, ShoppingBasket } from "lucide-react";
 import Image from "next/image";
-import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useContext, useState } from "react";
+import GlobalApi from "../_utils/GlobalApi";
+import { toast } from "sonner";
+import { UpdateCardContext } from "../_context/UpdateCardContext";
 
 function ProductItemDetail({ product }) {
+  const jwt = sessionStorage.getItem("jwt");
+  const user = JSON.parse(sessionStorage.getItem("user"));
+  const { updateCard, setUpdateCard } = useContext(UpdateCardContext);
+
   const [productTotalPrice, setProductTotalPrice] = useState(
     product?.attributes?.sellingPrice
       ? product?.attributes?.sellingPrice
@@ -13,6 +21,40 @@ function ProductItemDetail({ product }) {
   );
 
   const [quantity, setQuantity] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const addToCart = () => {
+    setLoading(true);
+
+    if (!jwt) {
+      router.push("/sign-in");
+      setLoading(false);
+      return;
+    }
+    const data = {
+      data: {
+        quantity: quantity,
+        amount: (quantity * productTotalPrice).toFixed(2),
+        products: product?.id,
+        users_permissions_users: user?.id,
+        userId: user?.id,
+      },
+    };
+    console.log("data", data);
+
+    GlobalApi.addToCard(data, jwt).then(
+      (resp) => {
+        toast("Product added to cart", { type: "success" });
+        setUpdateCard(!updateCard);
+        setLoading(false);
+      },
+      (e) => {
+        toast("Error while adding into cart", { type: "error" });
+        setLoading(false);
+      }
+    );
+  };
 
   const imageUrl = product?.attributes?.images?.data[0]?.attributes?.url;
 
@@ -78,9 +120,17 @@ function ProductItemDetail({ product }) {
               = ${(quantity * productTotalPrice).toFixed(2)}
             </h2>
           </div>
-          <Button className="flex gap-3">
+          <Button
+            className="flex gap-3"
+            onClick={() => addToCart()}
+            disabled={loading}
+          >
             <ShoppingBasket />
-            Add to card
+            {loading ? (
+              <LoaderCircle className="animate-spin" />
+            ) : (
+              "Add to card"
+            )}
           </Button>
         </div>
         <h2 className="">
