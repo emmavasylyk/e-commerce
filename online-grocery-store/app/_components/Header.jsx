@@ -23,6 +23,17 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { UpdateCardContext } from "../_context/UpdateCardContext";
 
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import CartItemList from "./CartItemList";
+import { toast } from "sonner";
+
 function Header() {
   const [categoryList, setCategoryList] = useState([]);
   const [totalCartItem, setTotalCartItem] = useState(0);
@@ -44,6 +55,7 @@ function Header() {
   }, []);
 
   const { updateCard, setUpdateCard } = useContext(UpdateCardContext);
+  const [cardItemList, setCardItemList] = useState([]);
 
   useEffect(() => {
     getCategoryList();
@@ -65,14 +77,22 @@ function Header() {
   // Used to get total cart items
   const getCardItems = async () => {
     if (!user || !jwt) return;
-    const cardItemList = await GlobalApi.getCardItems(user.id, jwt);
-    console.log("cardItemList", cardItemList);
-    setTotalCartItem(cardItemList?.length);
+    const cardItemList_ = await GlobalApi.getCardItems(user.id, jwt);
+    console.log("cardItemList", cardItemList_);
+    setTotalCartItem(cardItemList_?.length);
+    setCardItemList(cardItemList_);
   };
 
   const onSignOut = () => {
     sessionStorage.clear();
     router.push("/sign-in");
+  };
+
+  const onDeleteItem = (id) => {
+    GlobalApi.deleteCartItem(id, jwt).then((resp) => {
+      toast("Item deleted successfully", { type: "success" });
+      getCardItems();
+    });
   };
 
   return (
@@ -126,12 +146,30 @@ function Header() {
         </div>
       </div>
       <div className="flex items-center gap-5">
-        <h2 className="flex gap-2 items-center text-lg">
-          <ShoppingBasket className="w-7 h-7" />{" "}
-          <span className="bg-primary text-white px-2 rounded-full">
-            {totalCartItem}
-          </span>
-        </h2>
+        <Sheet>
+          <SheetTrigger asChild>
+            <h2 className="flex gap-2 items-center text-lg">
+              <ShoppingBasket className="w-7 h-7" />{" "}
+              <span className="bg-primary text-white px-2 rounded-full">
+                {totalCartItem}
+              </span>
+            </h2>
+          </SheetTrigger>
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle className="bg-primary text-white font-bold text-lg p-2">
+                My Cart
+              </SheetTitle>
+              <SheetDescription>
+                <CartItemList
+                  cartItemList={cardItemList}
+                  onDeleteItem={onDeleteItem}
+                />
+              </SheetDescription>
+            </SheetHeader>
+          </SheetContent>
+        </Sheet>
+
         {!isLogin ? (
           <Link href="/sign-in">
             <Button>Login</Button>
