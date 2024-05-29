@@ -4,16 +4,16 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 function CartItemList({ cartItemList, onDeleteItem }) {
-  const [subTotal, setSubTotal] = useState(0);
+  // const [subTotal, setSubTotal] = useState(0);
 
-  useEffect(() => {
-    let total = 0;
+  // useEffect(() => {
+  //   let total = 0;
 
-    cartItemList.forEach((element) => {
-      total = total + element.amount;
-    });
-    setSubTotal(total.toFixed(2));
-  }, [cartItemList]);
+  //   cartItemList.forEach((element) => {
+  //     total = total + element.amount;
+  //   });
+  //   setSubTotal(total.toFixed(2));
+  // }, [cartItemList]);
 
   return (
     <div>
@@ -44,12 +44,12 @@ function CartItemList({ cartItemList, onDeleteItem }) {
           </div>
         ))}
       </div>
-      <div className="absolute bottom-6 w-[90%] flex flex-col">
+      {/* <div className="absolute bottom-6 w-[90%] flex flex-col">
         <h2 className="text-lg font-bold flex justify-between items-center">
           Subtotal <span className="">${subTotal}</span>
         </h2>
-        <Button>View Cart</Button>
-      </div>
+        <Button>Checkout</Button>
+      </div> */}
     </div>
   );
 }

@@ -15,10 +15,11 @@ function ProductItemDetail({ product }) {
   const { updateCard, setUpdateCard } = useContext(UpdateCardContext);
 
   const [productTotalPrice, setProductTotalPrice] = useState(
-    product?.attributes?.sellingPrice
-      ? product?.attributes?.sellingPrice
-      : product?.attributes?.mrp
+    product?.attributes?.price
   );
+  // const [productTotalPrice, setProductTotalPrice] = useState(
+  //   product?.attributes?.sellingPrice
+  // );
 
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -59,22 +60,17 @@ function ProductItemDetail({ product }) {
   const imageUrl = product?.attributes?.images?.data[0]?.attributes?.url;
 
   const incrementQuantity = () => {
+    console.log("price", productTotalPrice);
     setQuantity(quantity + 1);
-    setProductTotalPrice(
-      product?.attributes?.sellingPrice
-        ? product?.attributes?.sellingPrice * quantity
-        : product?.attributes?.mrp * quantity
-    );
+    console.log("quantity", quantity);
+    // setProductTotalPrice(quantity * productTotalPrice);
+    setProductTotalPrice(product?.attributes?.price * quantity);
   };
 
   const decrementQuantity = () => {
     if (quantity > 1) {
       setQuantity(quantity - 1);
-      setProductTotalPrice(
-        product?.attributes?.sellingPrice
-          ? product?.attributes?.sellingPrice * quantity
-          : product?.attributes?.mrp * quantity
-      );
+      setProductTotalPrice(quantity * productTotalPrice);
     }
   };
 
@@ -92,7 +88,17 @@ function ProductItemDetail({ product }) {
         <p className="text-sm text-gray-500">
           {product?.attributes?.description}
         </p>
-        <div className="flex gap-3 ">
+        <div className="flex gap-3">
+          <span className="font-bold text-3xl">
+            ${product?.attributes?.price}
+          </span>
+          {product?.attributes?.sellingPrice && (
+            <s className="font-bold text-3xl text-gray-500">
+              ${product?.attributes?.sellingPrice}
+            </s>
+          )}
+        </div>
+        {/* <div className="flex gap-3 ">
           {product?.attributes?.sellingPrice && (
             <h2 className="font-bold text-3xl">
               ${product?.attributes?.sellingPrice}
@@ -103,9 +109,9 @@ function ProductItemDetail({ product }) {
               product?.attributes?.sellingPrice && "line-through text-gray-500"
             } `}
           >
-            ${product?.attributes?.mrp}
+            ${product?.attributes?.price}
           </h2>
-        </div>
+        </div> */}
         <h2 className="font-medium text-lg">
           Quantity ({product?.attributes?.itemQuantityType})
         </h2>
@@ -117,7 +123,7 @@ function ProductItemDetail({ product }) {
               <button onClick={incrementQuantity}>+</button>
             </div>
             <h2 className="text-2xl font-bold">
-              = ${(quantity * productTotalPrice).toFixed(2)}
+              = ${(quantity * product?.attributes?.price).toFixed(2)}
             </h2>
           </div>
           <Button

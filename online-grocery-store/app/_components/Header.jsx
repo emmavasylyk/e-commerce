@@ -25,6 +25,7 @@ import { UpdateCardContext } from "../_context/UpdateCardContext";
 
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
@@ -78,7 +79,7 @@ function Header() {
   const getCardItems = async () => {
     if (!user || !jwt) return;
     const cardItemList_ = await GlobalApi.getCardItems(user.id, jwt);
-    console.log("cardItemList", cardItemList_);
+    // console.log("cardItemList", cardItemList_);
     setTotalCartItem(cardItemList_?.length);
     setCardItemList(cardItemList_);
   };
@@ -94,6 +95,17 @@ function Header() {
       getCardItems();
     });
   };
+
+  const [subTotal, setSubTotal] = useState(0);
+
+  useEffect(() => {
+    let total = 0;
+
+    cardItemList.forEach((element) => {
+      total = total + element.amount;
+    });
+    setSubTotal(total.toFixed(2));
+  }, [cardItemList]);
 
   return (
     <div className="p-5 shadow-sm flex items-center justify-between">
@@ -167,6 +179,18 @@ function Header() {
                 />
               </SheetDescription>
             </SheetHeader>
+            <SheetClose asChild>
+              <div className="absolute bottom-6 w-[90%] flex flex-col">
+                <h2 className="text-lg font-bold flex justify-between items-center">
+                  Subtotal <span className="">${subTotal}</span>
+                </h2>
+                <Button
+                  onClick={() => router.push(jwt ? "/checkout" : "/sign-in")}
+                >
+                  Checkout
+                </Button>
+              </div>
+            </SheetClose>
           </SheetContent>
         </Sheet>
 

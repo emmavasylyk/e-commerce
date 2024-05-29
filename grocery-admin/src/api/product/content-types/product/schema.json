@@ -4,7 +4,8 @@
   "info": {
     "singularName": "product",
     "pluralName": "products",
-    "displayName": "Product"
+    "displayName": "Product",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -17,8 +18,9 @@
     "description": {
       "type": "string"
     },
-    "mrp": {
-      "type": "decimal"
+    "price": {
+      "type": "decimal",
+      "required": false
     },
     "sellingPrice": {
       "type": "decimal"
@@ -30,14 +32,15 @@
       "type": "uid"
     },
     "images": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
       "allowedTypes": [
         "images",
         "files",
         "videos",
         "audios"
-      ],
-      "type": "media",
-      "multiple": true
+      ]
     },
     "categories": {
       "type": "relation",

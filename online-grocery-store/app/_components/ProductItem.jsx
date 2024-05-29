@@ -25,20 +25,13 @@ function ProductItem({ product }) {
       />
       <h2 className="font-bold text-lg">{product?.attributes?.name}</h2>
       <div className="flex gap-3">
+        <span className="font-bold text-lg">${product?.attributes?.price}</span>
         {product?.attributes?.sellingPrice && (
-          <h2 className="font-bold text-lg">
+          <s className="font-bold text-lg text-gray-500">
             ${product?.attributes?.sellingPrice}
-          </h2>
+          </s>
         )}
-        <h2
-          className={`font-bold text-lg ${
-            product?.attributes?.sellingPrice && "line-through text-gray-500"
-          } `}
-        >
-          ${product?.attributes?.mrp}
-        </h2>
       </div>
-
       <Dialog>
         <DialogTrigger asChild>
           <Button
