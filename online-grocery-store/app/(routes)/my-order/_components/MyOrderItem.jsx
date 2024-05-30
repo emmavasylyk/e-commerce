@@ -3,25 +3,26 @@ import React from "react";
 
 function MyOrderItem({ orderItem }) {
   return (
-    <div className="w-[60%]">
-      <div className="grid grid-cols-5 mt-3 items-center">
+    <div className="">
+      <div className="flex md:grid gap-4 items-center py-2 xl:py-4">
         <Image
           src={`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}${orderItem?.product?.data?.attributes?.images.data[0]?.attributes?.url}`}
-          width={80}
-          height={80}
+          width={100}
+          height={100}
           alt={orderItem?.product?.data?.attributes?.name}
-          className="bg-gray-100 p-5 border rounded-md"
+          className="bg-gray-100 p-5 border rounded-md h-[100px]"
         />
-        <div className="col-span-2">
-          <h2 className="">{orderItem?.product?.data?.attributes?.name}</h2>
-          <h2 className="">
-            Item Price: ${orderItem?.product?.data?.attributes?.price}
-          </h2>
+        <div className="text-sm grid gap-1 xl:text-base">
+          <p className="font-medium">
+            {orderItem?.product?.data?.attributes?.name}
+          </p>
+          <p className="">
+            Product Price: ${orderItem?.product?.data?.attributes?.price}
+          </p>
+          <p className="">Quantity: {orderItem?.quantity}</p>
+          <p className="">Price: ${orderItem?.amount}</p>
         </div>
-        <h2 className="">Quantity: {orderItem?.quantity}</h2>
-        <h2 className="">Price: ${orderItem?.amount}</h2>
       </div>
-      <hr className="mt-3" />
     </div>
   );
 }

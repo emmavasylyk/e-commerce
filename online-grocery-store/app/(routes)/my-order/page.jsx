@@ -3,70 +3,50 @@
 import GlobalApi from "@/app/_utils/GlobalApi";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import moment from "moment";
-import MyOrderItem from "./_components/MyOrderItem";
+import MyOrderList from "./_components/MyOrderList";
 
 function MyOrder() {
-  const jwt = sessionStorage.getItem("jwt");
-  const user = JSON.parse(sessionStorage.getItem("user"));
+  const [jwt, setJwt] = useState(null);
+  const [user, setUser] = useState(null);
   const [orderList, setOrderList] = useState([]);
 
   const router = useRouter();
 
   useEffect(() => {
-    if (!jwt) {
-      router.replace("/");
-    }
+    // Перевірка, чи код виконується на клієнтській стороні
+    if (typeof window !== "undefined") {
+      const jwt = sessionStorage.getItem("jwt");
+      const user = JSON.parse(sessionStorage.getItem("user"));
 
-    getMyOrder();
+      if (!jwt) {
+        router.replace("/");
+      } else {
+        setJwt(jwt);
+        setUser(user);
+        getMyOrder(user.id, jwt);
+      }
+    }
   }, []);
 
-  const getMyOrder = async () => {
-    const orderList_ = await GlobalApi.getMyOrder(user.id, jwt);
-    console.log("orderList", orderList_);
+  const getMyOrder = async (userId, jwt) => {
+    const orderList_ = await GlobalApi.getMyOrder(userId, jwt);
     setOrderList(orderList_);
   };
+
+  if (!user || !jwt) {
+    return null; // можна повернути спінер або інший індикатор завантаження
+  }
 
   return (
     <div>
       <h2 className="p-3 bg-primary text-xl font-bold text-center text-white">
         My Order
       </h2>
-      <div className="py-8 mx-7 md:mx-20">
-        <h2 className="text-3xl font-bold text-primary">Order History</h2>
-        <div className="">
-          {orderList.map((item, index) => (
-            <Collapsible key={index}>
-              <CollapsibleTrigger>
-                <div className="border p-2 bg-slate-100 flex justify-evenly gap-24">
-                  <h2 className="">
-                    <span className="font-bold mr-2">Order Data:</span>
-                    {moment(item?.createdAt).format("DD/MMM/YYYY")}
-                  </h2>
-                  <h2 className="">
-                    <span className="font-bold mr-2">Total Amount:</span>$
-                    {item?.totalOrderAmount}
-                  </h2>
-                  <h2 className="">
-                    <span className="font-bold mr-2">Status:</span>{" "}
-                    {item?.status}
-                  </h2>
-                </div>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                {item?.orderItemList?.map((order, idx) => (
-                  <MyOrderItem orderItem={order} key={idx} />
-                ))}
-              </CollapsibleContent>
-            </Collapsible>
-          ))}
-        </div>
+      <div className="py-5 mx-7 md:mx-10 xl:mx-20">
+        <h2 className="text-lg md:text-3xl font-bold text-primary mb-5 md:mb-6">
+          Order History
+        </h2>
+        <MyOrderList orderList={orderList} />
       </div>
     </div>
   );
