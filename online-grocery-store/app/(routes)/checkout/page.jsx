@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
+import CartItemList from "@/app/_components/CartItemList";
 
 // const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_API_KEY);
 // console.log("Strapi key", stripePromise);
@@ -95,8 +96,12 @@ function Checkout() {
 
     GlobalApi.createOrder(payload, jwt)
       .then((resp) => {
-        console.log("resp", resp);
         toast("Order places successfully", { type: "success" });
+
+        cardItemList.forEach((item, index) => {
+          GlobalApi.deleteCartItem(item.id, jwt).then((resp) => {});
+        });
+        // router.replace("/order-confirmation");
       })
       .finally(() => {
         createCheckoutSession();
@@ -157,9 +162,7 @@ function Checkout() {
             </h2>
             <Button
               onClick={() => onApprove({ paymentId: 123 })}
-
-              // onApprove={() => onApprove({pa})}
-              // onClick={createCheckoutSession}
+              disabled={!(username && email && phone && address && zip)}
             >
               Payment <ArrowBigRight />
             </Button>

@@ -110,7 +110,9 @@ function Header() {
   return (
     <div className="p-5 shadow-sm flex items-center justify-between">
       <div className="flex items-center gap-8">
-        <Image src="/logo.png" alt="logo" width={100} height={100} />
+        <Link href="/" className="cursor-pointer">
+          <Image src="/logo.png" alt="logo" width={100} height={100} />
+        </Link>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -207,7 +209,11 @@ function Header() {
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>My Order</DropdownMenuItem>
+
+              <DropdownMenuItem asChild>
+                <Link href="/my-order">My Order</Link>
+              </DropdownMenuItem>
+
               <DropdownMenuItem onClick={() => onSignOut()}>
                 Logout
               </DropdownMenuItem>
