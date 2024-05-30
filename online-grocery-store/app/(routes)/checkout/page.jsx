@@ -9,6 +9,7 @@ import { ArrowBigRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "sonner";
 
 // const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_API_KEY);
 // console.log("Strapi key", stripePromise);
@@ -61,13 +62,7 @@ function Checkout() {
 
   const createCheckoutSession = async () => {
     const data = {
-      //   cardItemList,
-      //   username,
       email,
-      //   phone,
-      //   zip,
-      //   address,
-      //   subTotal,
       totalAmount: calculateTotalAmount(),
     };
 
@@ -78,6 +73,34 @@ function Checkout() {
     console.log("stripeUrl", stripeUrl);
 
     window.location.href = stripeUrl.data;
+  };
+
+  const onApprove = (data) => {
+    console.log("data", data);
+
+    const payload = {
+      data: {
+        paymentId: data.paymentId.toString(),
+        totalOrderAmount: calculateTotalAmount(),
+        username: username,
+        email: email,
+        phone: phone,
+        zip: zip,
+        address: address,
+        orderItemList: cardItemList,
+        userId: user.id,
+      },
+    };
+    console.log("payload", payload);
+
+    GlobalApi.createOrder(payload, jwt)
+      .then((resp) => {
+        console.log("resp", resp);
+        toast("Order places successfully", { type: "success" });
+      })
+      .finally(() => {
+        createCheckoutSession();
+      });
   };
 
   return (
@@ -132,7 +155,12 @@ function Checkout() {
             <h2 className="font-bold flex justify-between">
               Total : <span className="">${calculateTotalAmount()}</span>
             </h2>
-            <Button onClick={createCheckoutSession}>
+            <Button
+              onClick={() => onApprove({ paymentId: 123 })}
+
+              // onApprove={() => onApprove({pa})}
+              // onClick={createCheckoutSession}
+            >
               Payment <ArrowBigRight />
             </Button>
           </div>

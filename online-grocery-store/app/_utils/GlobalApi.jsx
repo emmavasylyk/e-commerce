@@ -52,14 +52,22 @@ const getCardItems = (userId, jwt) =>
         image:
           item?.attributes?.products?.data[0]?.attributes?.images?.data[0]
             ?.attributes?.url,
-        actualPrice: item?.attributes?.products?.data[0]?.attributes?.mrp,
+        actualPrice: item?.attributes?.products?.data[0]?.attributes?.price,
         id: item?.id,
+        product: item?.attributes?.products?.data[0]?.id,
       }));
       return cardItemsList;
     });
 
 const deleteCartItem = (id, jwt) =>
   axiosClient.delete(`/user-cards/${id}`, {
+    headers: {
+      Authorization: `Bearer ${jwt}`,
+    },
+  });
+
+const createOrder = (data, jwt) =>
+  axiosClient.post("/orders", data, {
     headers: {
       Authorization: `Bearer ${jwt}`,
     },
@@ -76,4 +84,5 @@ export default {
   addToCard,
   getCardItems,
   deleteCartItem,
+  createOrder,
 };

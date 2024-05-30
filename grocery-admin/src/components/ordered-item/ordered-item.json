@@ -1,14 +1,15 @@
 {
   "collectionName": "components_ordered_item_ordered_items",
   "info": {
-    "displayName": "OrderedItem"
+    "displayName": "OrderedItem",
+    "description": ""
   },
   "options": {},
   "attributes": {
     "quantity": {
       "type": "decimal"
     },
-    "price": {
+    "amount": {
       "type": "decimal"
     },
     "product": {

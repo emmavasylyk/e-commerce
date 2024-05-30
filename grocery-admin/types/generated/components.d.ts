@@ -4,10 +4,11 @@ export interface OrderedItemOrderedItem extends Schema.Component {
   collectionName: 'components_ordered_item_ordered_items';
   info: {
     displayName: 'OrderedItem';
+    description: '';
   };
   attributes: {
     quantity: Attribute.Decimal;
-    price: Attribute.Decimal;
+    amount: Attribute.Decimal;
     product: Attribute.Relation<
       'ordered-item.ordered-item',
       'oneToOne',
