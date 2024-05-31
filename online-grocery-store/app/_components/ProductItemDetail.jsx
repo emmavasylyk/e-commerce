@@ -1,12 +1,13 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { LoaderCircle, ShoppingBasket } from "lucide-react";
+import React, { useContext, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useContext, useState } from "react";
-import GlobalApi from "../_utils/GlobalApi";
 import { toast } from "sonner";
+import { LoaderCircle, ShoppingBasket } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import GlobalApi from "../_utils/GlobalApi";
 import { UpdateCardContext } from "../_context/UpdateCardContext";
 
 function ProductItemDetail({ product }) {
@@ -17,9 +18,6 @@ function ProductItemDetail({ product }) {
   const [productTotalPrice, setProductTotalPrice] = useState(
     product?.attributes?.price
   );
-  // const [productTotalPrice, setProductTotalPrice] = useState(
-  //   product?.attributes?.sellingPrice
-  // );
 
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -42,7 +40,6 @@ function ProductItemDetail({ product }) {
         userId: user?.id,
       },
     };
-    console.log("data", data);
 
     GlobalApi.addToCard(data, jwt).then(
       (resp) => {
@@ -60,10 +57,7 @@ function ProductItemDetail({ product }) {
   const imageUrl = product?.attributes?.images?.data[0]?.attributes?.url;
 
   const incrementQuantity = () => {
-    console.log("price", productTotalPrice);
     setQuantity(quantity + 1);
-    console.log("quantity", quantity);
-    // setProductTotalPrice(quantity * productTotalPrice);
     setProductTotalPrice(product?.attributes?.price * quantity);
   };
 
@@ -98,20 +92,6 @@ function ProductItemDetail({ product }) {
             </s>
           )}
         </div>
-        {/* <div className="flex gap-3 ">
-          {product?.attributes?.sellingPrice && (
-            <h2 className="font-bold text-3xl">
-              ${product?.attributes?.sellingPrice}
-            </h2>
-          )}
-          <h2
-            className={`font-bold text-3xl ${
-              product?.attributes?.sellingPrice && "line-through text-gray-500"
-            } `}
-          >
-            ${product?.attributes?.price}
-          </h2>
-        </div> */}
         <h2 className="font-medium text-lg">
           Quantity ({product?.attributes?.itemQuantityType})
         </h2>

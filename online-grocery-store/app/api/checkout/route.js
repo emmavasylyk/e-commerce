@@ -1,4 +1,3 @@
-import Stripe from "stripe";
 import { NextResponse } from "next/server";
 
 import { stripe } from "@/lib/stripe";
@@ -32,11 +31,9 @@ export async function POST(req) {
       },
     });
 
-    console.log("session", session);
-
     return new NextResponse(session.url, { status: 200 });
   } catch (error) {
-    // console.error("Error creating checkout session:", error);
+    console.error("Error creating checkout session:", error);
     return new NextResponse("Internal Server Error", { status: 501 });
   }
 }

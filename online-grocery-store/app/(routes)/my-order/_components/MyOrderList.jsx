@@ -1,10 +1,11 @@
 import React from "react";
+import moment from "moment";
+
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import moment from "moment";
 import MyOrderItem from "./MyOrderItem";
 
 function MyOrderList({ orderList }) {

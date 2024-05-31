@@ -51,7 +51,7 @@ function ProductItem({ product }) {
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogDescription>
+            <DialogDescription asChild>
               <ProductItemDetail product={product} />
             </DialogDescription>
           </DialogHeader>

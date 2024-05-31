@@ -1,8 +1,9 @@
 "use client";
 
-import GlobalApi from "@/app/_utils/GlobalApi";
-import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
+import GlobalApi from "@/app/_utils/GlobalApi";
 import MyOrderList from "./_components/MyOrderList";
 
 function MyOrder() {
@@ -13,7 +14,6 @@ function MyOrder() {
   const router = useRouter();
 
   useEffect(() => {
-    // Перевірка, чи код виконується на клієнтській стороні
     if (typeof window !== "undefined") {
       const jwt = sessionStorage.getItem("jwt");
       const user = JSON.parse(sessionStorage.getItem("user"));
@@ -34,7 +34,7 @@ function MyOrder() {
   };
 
   if (!user || !jwt) {
-    return null; // можна повернути спінер або інший індикатор завантаження
+    return null;
   }
 
   return (
