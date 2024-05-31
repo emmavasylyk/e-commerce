@@ -66,13 +66,14 @@ const deleteCartItem = (id, jwt) =>
     },
   });
 
-const createOrder = (data, jwt) =>
-  axiosClient.post("/orders", data, {
+const createOrder = (data, jwt) => {
+  console.log("DATAAAA");
+  return axiosClient.post("/orders", data, {
     headers: {
       Authorization: `Bearer ${jwt}`,
     },
   });
-
+};
 const getMyOrder = (userId, jwt) =>
   axiosClient
     .get(

@@ -17,7 +17,7 @@ function MyOrderList({ orderList }) {
             <div className="border p-2 md:p-4 xl:p-5 w-full bg-slate-100 grid grid-cols-3 md:items-center justify-between gap-6 xl:gap-24 md:gap-6">
               <p className="text-xs md:text-base xl:text-xl flex flex-col gap-1 xl:flex-row">
                 <span className="font-bold">Order Data:</span>
-                {moment(item?.createdAt).subtract(10, "days").calendar()}
+                {moment(item?.createdAt).format("l")}
               </p>
               <p className="text-xs md:text-base xl:text-xl flex flex-col gap-1 xl:flex-row">
                 <span className="font-bold">Total Amount:</span>$

@@ -31,9 +31,11 @@ export async function POST(req) {
       },
     });
 
+    console.log("session.url", session.url);
+
     return new NextResponse(session.url, { status: 200 });
   } catch (error) {
     console.error("Error creating checkout session:", error);
-    return new NextResponse("Internal Server Error", { status: 501 });
+    return new NextResponse("Internal Server Error", { status: 500 });
   }
 }

@@ -1,10 +1,7 @@
 "use client";
-import Stripe from "stripe";
-import { loadStripe } from "@stripe/stripe-js";
 
 import GlobalApi from "@/app/_utils/GlobalApi";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { ArrowBigRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -12,19 +9,31 @@ import axios from "axios";
 import { toast } from "sonner";
 import CartItemList from "@/app/_components/CartItemList";
 
-// const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_API_KEY);
-// console.log("Strapi key", stripePromise);
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import Form from "./_components/Form";
+
+const schema = yup
+  .object({
+    username: yup.string().required().min(1).max(10),
+    email: yup.string().email().required(),
+    phone: yup.number().positive().integer().required(),
+    zip: yup.number().positive().integer().required(),
+    address: yup.string().required(),
+  })
+  .required();
 
 function Checkout() {
   const [totalCartItem, setTotalCartItem] = useState(0);
   const [cardItemList, setCardItemList] = useState([]);
   const [subTotal, setSubTotal] = useState(0);
 
-  const [username, setUsername] = useState();
-  const [email, setEmail] = useState();
-  const [phone, setPhone] = useState();
-  const [zip, setZip] = useState();
-  const [address, setAddress] = useState();
+  // const [username, setUsername] = useState();
+  // const [email, setEmail] = useState();
+  // const [phone, setPhone] = useState();
+  // const [zip, setZip] = useState();
+  // const [address, setAddress] = useState();
   const isLogin = sessionStorage.getItem("jwt") ? true : false;
   const jwt = sessionStorage.getItem("jwt");
   const user = JSON.parse(sessionStorage.getItem("user"));
@@ -61,9 +70,9 @@ function Checkout() {
     return totalAmount.toFixed(2);
   };
 
-  const createCheckoutSession = async () => {
+  const createCheckoutSession = async (payload) => {
     const data = {
-      email,
+      email: payload.data.email,
       totalAmount: calculateTotalAmount(),
     };
 
@@ -76,18 +85,24 @@ function Checkout() {
     window.location.href = stripeUrl.data;
   };
 
-  const onApprove = (data) => {
-    console.log("data", data);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: "onChange",
+  });
 
+  function onSubmit(data) {
     const payload = {
       data: {
-        paymentId: data.paymentId.toString(),
         totalOrderAmount: calculateTotalAmount(),
-        username: username,
-        email: email,
-        phone: phone,
-        zip: zip,
-        address: address,
+        username: String(data.username),
+        email: String(data.email),
+        phone: String(data.phone),
+        zip: String(data.zip),
+        address: String(data.address),
         orderItemList: cardItemList,
         userId: user.id,
       },
@@ -101,12 +116,11 @@ function Checkout() {
         cardItemList.forEach((item, index) => {
           GlobalApi.deleteCartItem(item.id, jwt).then((resp) => {});
         });
-        // router.replace("/order-confirmation");
       })
       .finally(() => {
-        createCheckoutSession();
+        createCheckoutSession(payload);
       });
-  };
+  }
 
   return (
     <div>
@@ -116,29 +130,7 @@ function Checkout() {
       <div className="p-5 px-5 md:px-10 grid grid-cols-1 md:grid-cols-3 py-8">
         <div className="md:col-span-2 mx-20">
           <h2 className="font-bold text-3xl">Billing Details</h2>
-          <div className="grid md:grid-cols-2 gap-10 mt-3">
-            <Input
-              placeholder="Name"
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <Input
-              placeholder="Email"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-10 mt-3">
-            <Input
-              placeholder="Phone"
-              onChange={(e) => setPhone(e.target.value)}
-            />
-            <Input placeholder="Zip" onChange={(e) => setZip(e.target.value)} />
-          </div>
-          <div className="mt-3">
-            <Input
-              placeholder="Address"
-              onChange={(e) => setAddress(e.target.value)}
-            />
-          </div>
+          <Form register={register} errors={errors} />
         </div>
         <div className="mx-10 border">
           <h2 className="p-3 bg-gray-200 font-bold text-center">
@@ -161,8 +153,9 @@ function Checkout() {
               Total : <span className="">${calculateTotalAmount()}</span>
             </h2>
             <Button
-              onClick={() => onApprove({ paymentId: 123 })}
-              disabled={!(username && email && phone && address && zip)}
+              type="button"
+              onClick={handleSubmit(onSubmit)}
+              disabled={!isValid}
             >
               Payment <ArrowBigRight />
             </Button>
