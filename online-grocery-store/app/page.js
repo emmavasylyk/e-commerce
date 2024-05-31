@@ -1,11 +1,10 @@
-// import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 import CategoryList from "./_components/CategoryList";
 import ProductList from "./_components/ProductList";
 import Slider from "./_components/Slider";
-import GlobalApi from "./_utils/GlobalApi";
 import Footer from "./_components/Footer";
+import GlobalApi from "./_utils/GlobalApi";
 
 export default async function Home() {
   const sliderList = await GlobalApi.getSliders();
@@ -25,10 +24,10 @@ export default async function Home() {
       {/* Banner */}
       <Image
         src="/banner.png"
-        width={1000}
+        width={1320}
         height={300}
         alt="banner"
-        className="w-full h-[400px] object-contain"
+        className="w-full xl:h-[400px] xl:object-contain"
       />
       {/* Footer */}
       <Footer />

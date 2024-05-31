@@ -17,6 +17,7 @@ function Slider({ sliderList }) {
           delay: 5000,
         }),
       ]}
+      className="mb-5 md:mb-8 xl:mb-10"
     >
       <CarouselContent>
         {sliderList.map((slider, index) => {
