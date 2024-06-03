@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
-import CartItemList from "@/app/_components/CartItemList";
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -16,11 +15,24 @@ import Form from "./_components/Form";
 
 const schema = yup
   .object({
-    username: yup.string().required().min(1).max(10),
-    email: yup.string().email().required(),
-    phone: yup.number().positive().integer().required(),
-    zip: yup.number().positive().integer().required(),
-    address: yup.string().required(),
+    username: yup.string().required("Username is required").min(1).max(10),
+    email: yup
+      .string()
+      .email("Invalid email format")
+      .required("Email is required"),
+    phone: yup
+      .number()
+      .typeError("Phone number is required")
+      .positive("Phone number must be a positive number")
+      .integer("Phone number must be an integer")
+      .required("Phone number is required"),
+    zip: yup
+      .number()
+      .typeError("Zip code must be a number")
+      .positive("Zip code must be a positive number")
+      .integer("Zip code must be an integer")
+      .required("Zip code is required"),
+    address: yup.string().required("Address is required"),
   })
   .required();
 
@@ -28,30 +40,29 @@ function Checkout() {
   const [totalCartItem, setTotalCartItem] = useState(0);
   const [cardItemList, setCardItemList] = useState([]);
   const [subTotal, setSubTotal] = useState(0);
-
-  // const [username, setUsername] = useState();
-  // const [email, setEmail] = useState();
-  // const [phone, setPhone] = useState();
-  // const [zip, setZip] = useState();
-  // const [address, setAddress] = useState();
-  const isLogin = sessionStorage.getItem("jwt") ? true : false;
-  const jwt = sessionStorage.getItem("jwt");
-  const user = JSON.parse(sessionStorage.getItem("user"));
+  const [jwt, setJwt] = useState(null);
+  const [user, setUser] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
-    if (user && jwt) {
-      getCartItems();
+    const jwtToken = sessionStorage.getItem("jwt");
+    const userData = JSON.parse(sessionStorage.getItem("user"));
+
+    setJwt(jwtToken);
+    setUser(userData);
+
+    if (jwtToken && userData) {
+      getCartItems(userData.id, jwtToken);
     }
 
-    if (!jwt) {
+    if (!jwtToken) {
       router.push("/sign-in");
     }
-  }, [user, jwt]);
+  }, []);
 
-  const getCartItems = async () => {
-    if (!user || !jwt) return;
-    const cardItemList_ = await GlobalApi.getCardItems(user.id, jwt);
+  const getCartItems = async (userId, jwtToken) => {
+    if (!userId || !jwtToken) return;
+    const cardItemList_ = await GlobalApi.getCardItems(userId, jwtToken);
     setTotalCartItem(cardItemList_?.length);
     setCardItemList(cardItemList_);
   };
@@ -80,7 +91,6 @@ function Checkout() {
       "http://localhost:3000/api/checkout",
       data
     );
-    console.log("stripeUrl", stripeUrl);
 
     window.location.href = stripeUrl.data;
   };
@@ -88,6 +98,9 @@ function Checkout() {
   const {
     register,
     handleSubmit,
+    setError,
+    clearErrors,
+    control,
     formState: { errors, isValid },
   } = useForm({
     resolver: yupResolver(schema),
@@ -107,7 +120,6 @@ function Checkout() {
         userId: user.id,
       },
     };
-    console.log("payload", payload);
 
     GlobalApi.createOrder(payload, jwt)
       .then((resp) => {
@@ -129,8 +141,14 @@ function Checkout() {
       </h2>
       <div className="p-5 px-5 md:px-10 grid grid-cols-1 md:grid-cols-3 py-8">
         <div className="md:col-span-2 mx-20">
-          <h2 className="font-bold text-3xl">Billing Details</h2>
-          <Form register={register} errors={errors} />
+          <h2 className="font-bold text-3xl mb-10">Billing Details</h2>
+          <Form
+            register={register}
+            setError={setError}
+            errors={errors}
+            control={control}
+            clearErrors={clearErrors}
+          />
         </div>
         <div className="mx-10 border">
           <h2 className="p-3 bg-gray-200 font-bold text-center">

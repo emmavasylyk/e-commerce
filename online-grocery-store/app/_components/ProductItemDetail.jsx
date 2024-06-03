@@ -34,7 +34,7 @@ function ProductItemDetail({ product }) {
     const data = {
       data: {
         quantity: quantity,
-        amount: (quantity * productTotalPrice).toFixed(2),
+        amount: (quantity * product?.attributes?.price).toFixed(2),
         products: product?.id,
         users_permissions_users: user?.id,
         userId: user?.id,
@@ -64,7 +64,7 @@ function ProductItemDetail({ product }) {
   const decrementQuantity = () => {
     if (quantity > 1) {
       setQuantity(quantity - 1);
-      setProductTotalPrice(quantity * productTotalPrice);
+      setProductTotalPrice(quantity * product?.attributes?.price);
     }
   };
 
