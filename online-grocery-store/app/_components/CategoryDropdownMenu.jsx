@@ -30,6 +30,10 @@ function CategoryDropdownMenu({ categoryList }) {
           const imageUrls = category?.attributes?.icon?.data?.map(
             (image) => image?.attributes?.url
           );
+          console.log(
+            "imageUrls",
+            category?.attributes?.icon?.data[0]?.attributes?.url
+          );
           return (
             <Link
               href={`/products-category/${category?.attributes?.name}`}
