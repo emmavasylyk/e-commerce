@@ -4,7 +4,7 @@ module.exports = ({ env }) => [
   {
     name: "strapi::cors",
     config: {
-      origin: ["https://e-commerce-grocery-store.vercel.app/"], // Или укажите ваш домен
+      origin: ["https://e-commerce-grocery-store.vercel.app"], // Или укажите ваш домен
       headers: ["Content-Type", "Authorization", "Origin", "Accept"],
     },
   },
