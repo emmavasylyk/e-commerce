@@ -30,11 +30,6 @@ function CategoryDropdownMenu({ categoryList }) {
           const imageUrls = category?.attributes?.icon?.data?.map(
             (image) => image?.attributes?.url
           );
-          console.log(
-            "imageUrls",
-            category?.attributes?.icon?.data[0]?.attributes?.url
-          );
-          const imageUrl = category?.attributes?.icon?.data[0]?.attributes?.url;
           return (
             <Link
               href={`/products-category/${category?.attributes?.name}`}
@@ -44,16 +39,16 @@ function CategoryDropdownMenu({ categoryList }) {
                 key={category.id}
                 className="flex gap-4 items-center cursor-pointer"
               >
-                {/* {imageUrls?.map((imageUrl, index) => ( */}
-                <Image
-                  // key={index}
-                  src={`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}${imageUrl}`}
-                  unoptimized={true}
-                  alt="icon"
-                  width={30}
-                  height={30}
-                />
-                {/* ))} */}
+                {imageUrls?.map((imageUrl, index) => (
+                  <Image
+                    key={index}
+                    src={`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}${imageUrl}`}
+                    unoptimized={true}
+                    alt="icon"
+                    width={30}
+                    height={30}
+                  />
+                ))}
                 <h2 className="md:text-sm xl:text-base">
                   {category?.attributes?.name}
                 </h2>
