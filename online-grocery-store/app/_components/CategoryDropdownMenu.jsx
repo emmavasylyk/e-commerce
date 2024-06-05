@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 function CategoryDropdownMenu({ categoryList }) {
+  console.log("categoryList", categoryList);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
