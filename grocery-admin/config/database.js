@@ -1,3 +1,4 @@
+// второй способ
 const path = require("path");
 
 module.exports = ({ env }) => {
@@ -45,7 +46,7 @@ module.exports = ({ env }) => {
     },
   };
 };
-
+// то что было до
 // const path = require("path");
 
 // module.exports = ({ env }) => {
