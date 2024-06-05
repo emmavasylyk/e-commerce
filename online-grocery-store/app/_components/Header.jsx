@@ -79,8 +79,6 @@ function Header() {
     setSubTotal(total.toFixed(2));
   }, [cardItemList]);
 
-  console.log("CATEGORY LIST", categoryList);
-
   return (
     <div className="p-5 shadow-sm flex items-center justify-between">
       <div className="flex items-center gap-8">
