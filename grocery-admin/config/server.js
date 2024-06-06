@@ -1,7 +1,7 @@
 module.exports = ({ env }) => ({
   host: env("HOST", "0.0.0.0"),
   port: env.int("PORT", 1337),
-  url: env("PUBLIC_URL", "https://e-commerce-a30a.onrender.com"),
+  url: env("PUBLIC_URL", "https://e-commerce-9609.onrender.com"),
   app: {
     keys: env.array("APP_KEYS"),
   },
