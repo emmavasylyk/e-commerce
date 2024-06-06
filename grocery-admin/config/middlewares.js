@@ -33,7 +33,6 @@ module.exports = [
       headers: ["Content-Type", "Authorization", "Origin", "Accept"],
     },
   },
-  "strapi::security",
   "strapi::poweredBy",
   "strapi::logger",
   "strapi::query",
