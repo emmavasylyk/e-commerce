@@ -23,8 +23,8 @@ export async function POST(req) {
     const session = await stripe.checkout.sessions.create({
       line_items,
       mode: "payment",
-      success_url: `http://localhost:3000/order-confirmation/?success=1`,
-      cancel_url: `http://localhost:3000/?canceled=1`,
+      success_url: `https://e-commerce-grocery-store.vercel.app/order-confirmation/?success=1`,
+      cancel_url: `https://e-commerce-grocery-store.vercel.app/?canceled=1`,
       metadata: {
         courseId: "course.id",
         userId: "user.id",
