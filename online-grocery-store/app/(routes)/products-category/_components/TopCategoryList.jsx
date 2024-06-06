@@ -21,7 +21,7 @@ function TopCategoryList({ categoryList, selectedCategory }) {
             {imageUrls?.map((imageUrl, index) => (
               <Image
                 key={index}
-                src={`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}${imageUrl}`}
+                src={imageUrl}
                 alt="icon"
                 width={50}
                 height={50}

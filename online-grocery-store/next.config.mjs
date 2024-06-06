@@ -2,13 +2,20 @@
 const nextConfig = {
   reactStrictMode: false,
   images: {
-    domains: ["e-commerce-a30a.onrender.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        // port: "",
+        // pathname: "/my-bucket/**",
+      },
+    ],
   },
   async rewrites() {
     return [
       {
         source: "/api/:path*",
-        destination: "https://e-commerce-a30a.onrender.com/api/:path*", // Замените на ваш домен
+        destination: "https://e-commerce-9609.onrender.com/api/:path*", // Замените на ваш домен
       },
     ];
   },

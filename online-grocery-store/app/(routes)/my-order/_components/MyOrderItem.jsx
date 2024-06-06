@@ -6,7 +6,10 @@ function MyOrderItem({ orderItem }) {
     <div className="">
       <div className="flex md:grid gap-4 items-center py-2 xl:py-4">
         <Image
-          src={`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}${orderItem?.product?.data?.attributes?.images.data[0]?.attributes?.url}`}
+          src={
+            orderItem?.product?.data?.attributes?.images.data[0]?.attributes
+              ?.url
+          }
           width={100}
           height={100}
           alt={orderItem?.product?.data?.attributes?.name}

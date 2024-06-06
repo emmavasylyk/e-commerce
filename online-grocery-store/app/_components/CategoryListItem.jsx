@@ -12,7 +12,7 @@ function CategoryListItem({ category, images, index }) {
       {images?.map((image, index) => (
         <Image
           key={index}
-          src={`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}${image}`}
+          src={image}
           alt="icon"
           width={50}
           height={50}

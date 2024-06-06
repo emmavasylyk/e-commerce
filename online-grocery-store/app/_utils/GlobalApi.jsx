@@ -1,7 +1,7 @@
 const { default: axios } = require("axios");
 
 const axiosClient = axios.create({
-  baseURL: "https://e-commerce-a30a.onrender.com/api",
+  baseURL: "https://e-commerce-9609.onrender.com/api",
 });
 
 const getCategory = () => axiosClient.get("/categories?populate=*");

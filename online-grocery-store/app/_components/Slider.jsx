@@ -29,7 +29,7 @@ function Slider({ sliderList }) {
               {sliderUrls?.map((sliderUrl, index) => (
                 <Image
                   key={index}
-                  src={`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}${sliderUrl}`}
+                  src={sliderUrl}
                   width={1000}
                   height={400}
                   alt="slider"

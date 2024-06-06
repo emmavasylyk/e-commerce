@@ -19,7 +19,7 @@ function ProductItem({ product }) {
     <div className="p-2 md:p-6 flex flex-col items-center justify-between gap-2 md:gap-3 border rounded-lg hover:scale-105 hover:shadow-lg transition-all ease-in-out cursor-pointer">
       <div className="">
         <Image
-          src={`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}${imageUrl}`}
+          src={imageUrl}
           alt={product?.attributes?.name}
           width={500}
           height={200}
