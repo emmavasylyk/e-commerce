@@ -1,4 +1,5 @@
 const cloudinary = require("cloudinary").v2;
+
 module.exports = ({ env }) => ({
   upload: {
     config: {
@@ -10,6 +11,7 @@ module.exports = ({ env }) => ({
       },
       actionOptions: {
         upload: {},
+        uploadStream: {},
         delete: {},
       },
     },
