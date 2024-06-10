@@ -88,7 +88,7 @@ function Checkout() {
     };
 
     const stripeUrl = await axios.post(
-      "https://e-commerce-grocery-store.vercel.app/api/checkout",
+      `${process.env.NEXT_PUBLIC_APP_URL}/api/checkout`,
       data
     );
 
